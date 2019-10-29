@@ -2,9 +2,22 @@ version: '3'
 
 services:
 
+  mysql:
+    image: mysql:5.7
+    container_name: sandbox_es_db
+    ports:
+      - '3306:3306'
+    networks:
+      - 'esnet'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'search'
+      MYSQL_PASSWORD: 'search'
+      MYSQL_DATABASE: 'search'
+
   es01:
     image: elasticsearch:7.4.1
-    container_name: es01
+    container_name: sandbox_es_01
     environment:
       - node.name=es01
       - discovery.seed_hosts=es02
@@ -25,7 +38,7 @@ services:
 
   es02:
     image: elasticsearch:7.4.1
-    container_name: es02
+    container_name: sandbox_es_02
     environment:
       - node.name=es02
       - discovery.seed_hosts=es01
