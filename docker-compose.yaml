@@ -16,7 +16,7 @@ services:
       MYSQL_DATABASE: 'search'
 
   es01:
-    image: elasticsearch:7.4.1
+    image: elasticsearch:5.4.3-alpine
     container_name: sandbox_es_01
     environment:
       - node.name=es01
@@ -30,14 +30,15 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - esdata01:/usr/share/elasticsearch/data
+      #- esdata01:/usr/share/elasticsearch/data
+      - esdata01:/var/lib/elasticsearch/nodes/0/
     ports:
       - 9200:9200
     networks:
       - esnet
 
   es02:
-    image: elasticsearch:7.4.1
+    image: elasticsearch:5.4.3-alpine
     container_name: sandbox_es_02
     environment:
       - node.name=es02
@@ -51,7 +52,8 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - esdata02:/usr/share/elasticsearch/data
+      #- esdata02:/usr/share/elasticsearch/data
+      - esdata02:/var/lib/elasticsearch/nodes/0/
     networks:
       - esnet
 

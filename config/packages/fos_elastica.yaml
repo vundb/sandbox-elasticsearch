@@ -7,21 +7,33 @@ fos_elastica:
             settings:
                 index:
                     analysis:
+                        filter:
+                            autocomplete_filter:
+                                type: edge_ngram
+                                min_gram: 1
+                                max_gram: 20
                         analyzer:
                             keyword_analyzer: # this is a custom analyzer, see the explanations below
                                 type: custom
                                 tokenizer: standard
-                                filter: [standard, lowercase, asciifolding, trim]
+                                filter:
+                                    [standard, lowercase, asciifolding, trim]
+                            autocomplete:
+                                type: custom
+                                tokenizer: standard
+                                filter:
+                                    - lowercase
+                                    - autocomplete_filter
             types:
                 superhero: # the name of our type
                     properties:
                         name:
-                            analyzer: keyword_analyzer
-                            search_analyzer: keyword_analyzer
+                            analyzer: autocomplete
+                            search_analyzer: standard
                             type: text
                     persistence:
                         driver: orm
                         model: App\Entity\SuperHero
                         provider: ~
                         finder: ~
-                        repository: App\Repository\SuperHeroRepository
+                        repository: App\SearchRepository\SuperHeroRepository
